@@ -1,0 +1,26 @@
+AAPL - Apple Inc.
+
+ADBE - Adobe Inc.
+
+ADP - Automatic Data Processing, Inc.
+
+ALGN - Align Technology, Inc.
+
+BIIB - Biogen Inc.
+
+EA - Electronic Arts Inc.
+
+INTC - Intel Corporation
+
+INTU - Intuit Inc.
+
+KLAC - KLA Corporation
+
+MSFT - Microsoft Corporation
+
+NDSN - Nordson Corporation
+
+REGI - Renewable Energy Group, Inc.
+
+TROW - T. Rowe Price Group, Inc.
+

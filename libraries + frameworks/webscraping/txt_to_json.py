@@ -1,0 +1,3 @@
+with open('undervalued.txt', 'r') as f:
+  for line in f:
+    print(line)                                                                                                                                                                                                                                                                                                                                                                                                                                          

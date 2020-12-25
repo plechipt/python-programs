@@ -1,0 +1,70 @@
+AAPL - Apple Inc.
+
+ADBE - Adobe Inc.
+
+ADP - Automatic Data Processing, Inc.
+
+ALCO - Alico, Inc.
+
+ALGN - Align Technology, Inc.
+
+ANSS - ANSYS, Inc.
+
+ASML - ASML Holding N.V.
+
+BIIB - Biogen Inc.
+
+BKNG - Booking Holdings Inc.
+
+COLM - Columbia Sportswear Company
+
+CSX - CSX Corporation
+
+CTAS - Cintas Corporation
+
+EA - Electronic Arts Inc.
+
+EEFT - Euronet Worldwide, Inc.
+
+ERIE - Erie Indemnity Company
+
+FFIV - F5 Networks, Inc.
+
+GRMN - Garmin Ltd.
+
+HELE - Helen of Troy Limited
+
+INTC - Intel Corporation
+
+INTU - Intuit Inc.
+
+ITIC - Investors Title Company
+
+JCOM - J2 Global, Inc.
+
+KLAC - KLA Corporation
+
+LANC - Lancaster Colony Corporation
+
+LOPE - Grand Canyon Education, Inc.
+
+LULU - Lululemon Athletica Inc.
+
+MIDD - The Middleby Corporation
+
+MSFT - Microsoft Corporation
+
+NDSN - Nordson Corporation
+
+ODFL - Old Dominion Freight Line, Inc.
+
+PNRG - PrimeEnergy Resources Corporation
+
+REGI - Renewable Energy Group, Inc.
+
+ROST - Ross Stores, Inc.
+
+RYAAY - Ryanair Holdings plc
+
+TROW - T. Rowe Price Group, Inc.
+

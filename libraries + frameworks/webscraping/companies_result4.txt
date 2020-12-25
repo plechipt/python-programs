@@ -1,0 +1,56 @@
+AAPL - Apple Inc.
+
+ADBE - Adobe Inc.
+
+ADP - Automatic Data Processing, Inc.
+
+ALGN - Align Technology, Inc.
+
+ANSS - ANSYS, Inc.
+
+BIIB - Biogen Inc.
+
+CBOE - Cboe Global Markets, Inc.
+
+CTAS - Cintas Corporation
+
+EA - Electronic Arts Inc.
+
+EEFT - Euronet Worldwide, Inc.
+
+ERIE - Erie Indemnity Company
+
+FFIV - F5 Networks, Inc.
+
+ICLR - ICON Public Limited Company
+
+INTC - Intel Corporation
+
+INTU - Intuit Inc.
+
+KLAC - KLA Corporation
+
+LANC - Lancaster Colony Corporation
+
+LULU - Lululemon Athletica Inc.
+
+MIDD - The Middleby Corporation
+
+MSFT - Microsoft Corporation
+
+NDAQ - Nasdaq, Inc.
+
+NDSN - Nordson Corporation
+
+NFLX - Netflix, Inc.
+
+ODFL - Old Dominion Freight Line, Inc.
+
+REGI - Renewable Energy Group, Inc.
+
+ROST - Ross Stores, Inc.
+
+TROW - T. Rowe Price Group, Inc.
+
+ZBRA - Zebra Technologies Corporation
+
