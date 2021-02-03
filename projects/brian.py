@@ -12,4 +12,5 @@ with open('brian_je_gay2.txt', 'w') as f:
         
         else:
             f.write(f'Brija je gay XDDDDDD {i}')
+            
         f.write('\n')

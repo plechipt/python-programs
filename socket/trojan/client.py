@@ -3,8 +3,8 @@ import threading
 import os
 import sys
 
-#HOST = '192.168.1.167'
-HOST = '192.168.1.139'
+HOST = '192.168.1.167'
+#HOST = '192.168.1.139'
 PORT = 9090
 
 cmd_mode = False
