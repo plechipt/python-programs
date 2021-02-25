@@ -1,23 +1,32 @@
 import sys 
 import time
+import random
 import pygame
 
 pygame.init()
 
 # Basic vars
-size = width_window, height_window = 1200, 1000
+SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 1000
 black_background = (0, 0, 0)
 
-# Snake
 speed = 1 
 x_snake = 250
 y_snake = 250
-width_snake, height_snake = 30, 30
+snake_width, snake_height = 30, 30
 color_of_snake = (255, 255, 255)
 current_direction = 'down'
 
+snake_parts = []
+snake_parts_count = 0
+
+# Food
+x_food = random.randint(0, 1150)
+y_food = random.randint(0, 950)
+food_width, food_height = 30, 30
+color_of_food = (240, 52, 52, 1)
+
 pygame.display.set_caption('Snake Game')
-screen = pygame.display.set_mode((width_window, height_window))
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 def change_direction(current_direction, pressed):
     if pressed[pygame.K_RIGHT]:
@@ -44,12 +53,12 @@ def move(current_direction, x_snake, y_snake):
     return x_snake, y_snake
 
 def border(x_snake, y_snake):
-    snake_touched_x_border = x_snake < 0 or x_snake + width_snake > width_window
-    snake_touched_y_border = y_snake < 0 or y_snake + height_snake > height_window
+    snake_touched_x_border = x_snake < 0 or x_snake + snake_width > SCREEN_WIDTH
+    snake_touched_y_border = y_snake < 0 or y_snake + snake_height > SCREEN_HEIGHT
 
     if (snake_touched_x_border or snake_touched_y_border):
-        x_snake = (width_window - width_snake) / 2
-        y_snake = (height_window - height_snake) / 2
+        x_snake = (SCREEN_WIDTH - snake_width) / 2
+        y_snake = (SCREEN_HEIGHT - snake_height) / 2
 
     return x_snake, y_snake
 
@@ -65,10 +74,20 @@ while True:
             sys.exit()
 
     screen.fill(black_background)
+    
+    ### Snake
+    # Snake object
+    snake = pygame.draw.rect(screen, color_of_snake, ((x_snake, y_snake), (snake_width, snake_height)))
 
+    # Change direction if user pressed arrow key
     current_direction = change_direction(current_direction, pressed)
-    x_snake, y_snake = border(x_snake, y_snake)
+
+    # Move snake in current direction
     x_snake, y_snake = move(current_direction, x_snake, y_snake)
 
-    snake = pygame.draw.rect(screen, color_of_snake, ((x_snake, y_snake), (width_snake, height_snake)))
+    # Check if snake touched border
+    x_snake, y_snake = border(x_snake, y_snake)
+
+    ### Food
+    food = pygame.draw.rect(screen, color_of_food, ((x_food, y_food), (food_width, food_height)))
     pygame.display.update()
