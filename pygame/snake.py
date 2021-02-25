@@ -21,11 +21,11 @@ screen = pygame.display.set_mode(size)
 def move(pressed, x_rect, y_rect):
     if pressed[pygame.K_RIGHT]:
         x_rect += speed
-    elif pressed[pygame.K_LEFT]:
+    if pressed[pygame.K_LEFT]:
         x_rect -= speed
-    elif pressed[pygame.K_UP]:
+    if pressed[pygame.K_UP]:
         y_rect -= speed
-    elif pressed[pygame.K_DOWN]:
+    if pressed[pygame.K_DOWN]:
         y_rect += speed
 
     return x_rect, y_rect

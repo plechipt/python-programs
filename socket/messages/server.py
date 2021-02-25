@@ -13,7 +13,7 @@ server.listen()
 client, address = server.accept()
 
 while True:
-    server_input = input('\n...: ')
+    server_input = input('\nserver: ')
 
     if server_input == '':
         continue
