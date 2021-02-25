@@ -9,7 +9,7 @@ pygame.init()
 SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 1000
 black_background = (0, 0, 0)
 
-speed = 1 
+speed = 1.25
 x_snake = 250
 y_snake = 250
 snake_width, snake_height = 30, 30
@@ -20,8 +20,14 @@ snake_parts = []
 snake_parts_count = 0
 
 # Food
-x_food = random.randint(0, 1150)
-y_food = random.randint(0, 950)
+def reset_food():
+    print('test')
+    x_food = random.randint(0, 1150)
+    y_food = random.randint(0, 950)
+
+    return x_food, y_food
+
+x_food, y_food = reset_food()
 food_width, food_height = 30, 30
 color_of_food = (240, 52, 52, 1)
 
@@ -62,6 +68,16 @@ def border(x_snake, y_snake):
 
     return x_snake, y_snake
 
+def snake_ate_food(x_snake, y_snake, x_food, y_food):
+    snake_touched_food_x = (x_food + food_width) > x_snake and x_snake > (x_food - food_width)
+    snake_touched_food_y = (y_food + food_height) > y_snake and y_snake > (y_food - food_height)
+
+    if snake_touched_food_x and snake_touched_food_y:
+        x_food, y_food = reset_food()
+
+    return x_food, y_food
+
+
 
 while True:
     events = pygame.event.get()
@@ -69,6 +85,7 @@ while True:
     
     for event in events:
         action = event.type
+
         # Exit
         if action == pygame.QUIT:
             sys.exit()
@@ -89,5 +106,10 @@ while True:
     x_snake, y_snake = border(x_snake, y_snake)
 
     ### Food
+    # Food object
     food = pygame.draw.rect(screen, color_of_food, ((x_food, y_food), (food_width, food_height)))
+
+    # Check if snake ate food
+    x_food, y_food = snake_ate_food(x_snake, y_snake, x_food, y_food)
+
     pygame.display.update()
