@@ -3,20 +3,10 @@ import time
 import random
 import pygame
 
-pygame.init()
-
 # Basic vars
-SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 1000
 black_background = (0, 0, 0)
 white_color = (255, 255, 255)
-
-# Font
-bigger_font = pygame.font.Font('freesansbold.ttf', 32)
-smaller_font = pygame.font.Font('freesansbold.ttf', 20)
-
-# Score
-score_points = 0
-position_of_font = (10, 10)
+SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 1000
 
 
 class Snake:
@@ -29,160 +19,195 @@ class Snake:
         self.snake_height = 30
         self.color_of_snake = white_color
 
-class Food:
-    def __init__(self, x_food, y_food):
+    def draw_snake(self, screen):
+        positions = self.x_snake, self.y_snake
+        sizes = self.snake_width, self.snake_height
+
+        snake = pygame.draw.rect(screen, self.color_of_snake, ((positions), (sizes)))
+    
+    def change_direction(self, pressed):
+        if pressed[pygame.K_RIGHT]:
+            self.current_direction = 'right'
+        if pressed[pygame.K_LEFT]:
+            self.current_direction = 'left'
+        if pressed[pygame.K_UP]:
+            self.current_direction = 'up'
+        if pressed[pygame.K_DOWN]:
+            self.current_direction = 'down'
+
+    def move(self):
+        if self.current_direction == 'right':
+            self.x_snake += self.speed_of_snake
+        if self.current_direction == 'left':
+            self.x_snake -= self.speed_of_snake
+        if self.current_direction == 'up':
+            self.y_snake -= self.speed_of_snake
+        if self.current_direction == 'down':
+            self.y_snake += self.speed_of_snake
+
+    def check_snake_touched_border(self):
+        snake_touched_x_border = self.x_snake < 0 or self.x_snake + self.snake_width > SCREEN_WIDTH
+        snake_touched_y_border = self.y_snake < 0 or self.y_snake + self.snake_height > SCREEN_HEIGHT
+
+        if (snake_touched_x_border or snake_touched_y_border):
+            return True
+        else:
+            return False
+
+    def handle_speed(self, pressed):
+        speed_amount = 0.001
+
+        if pressed[pygame.K_a]:
+            self.speed_of_snake += speed_amount 
+        elif pressed[pygame.K_d]:
+            self.speed_of_snake -= speed_amount 
+        elif pressed[pygame.K_s]:
+            self.speed_of_snake = 1.25
+
+class Food(Snake):
+    def __init__(self, x_food, y_food, x_snake, y_snake, speed_of_snake, current_direction):
+        super().__init__(x_snake, y_snake, speed_of_snake, current_direction)
         self.x_food = x_food
         self.y_food = y_food
         self.food_width = 30
         self.food_height = 30
         self.color_of_food = (240, 52, 52, 1)
+    
+    def draw_food(self, screen):
+        positions = self.x_food, self.y_food
+        sizes = self.food_width, self.food_height
 
+        pygame.draw.rect(screen, self.color_of_food, ((positions), (sizes)))
 
-    def reset_food():
+    def reset_food(self):
         x_food = random.randint(0, 1150)
         y_food = random.randint(0, 950)
 
         return x_food, y_food
 
-pygame.display.set_caption('Snake Game')
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    def check_snake_ate_food(self):
+        x_start =  (self.x_food + self.food_width) > self.x_snake
+        x_end = self.x_snake > (self.x_food - self.food_width)
+        y_start = (self.y_food + self.food_height) > self.y_snake
+        y_end =  self.y_snake > (self.y_food - self.food_height)
 
-# Functions part
-def change_direction(current_direction, pressed):
-    if pressed[pygame.K_RIGHT]:
-        current_direction = 'right'
-    if pressed[pygame.K_LEFT]:
-        current_direction = 'left'
-    if pressed[pygame.K_UP]:
-        current_direction = 'up'
-    if pressed[pygame.K_DOWN]:
-        current_direction = 'down'
+        snake_touched_food_x = x_start and x_end
+        snake_touched_food_y =  y_start and y_end
 
-    return current_direction
+        if snake_touched_food_x and snake_touched_food_y:
+            return True
+        else:
+            return False
 
-def move(current_direction, x_snake, y_snake):
-    if current_direction == 'right':
-        x_snake += speed_of_snake
-    if current_direction == 'left':
-        x_snake -= speed_of_snake
-    if current_direction == 'up':
-        y_snake -= speed_of_snake
-    if current_direction == 'down':
-        y_snake += speed_of_snake
+    def handle_eaten_food(self):
+        score_points += 1
+        speed_of_snake += 0.1
+        x_food, y_food = reset_food()
 
-    return x_snake, y_snake
 
-def check_snake_touched_border(x_snake, y_snake):
-    snake_touched_x_border = x_snake < 0 or x_snake + snake_width > SCREEN_WIDTH
-    snake_touched_y_border = y_snake < 0 or y_snake + snake_height > SCREEN_HEIGHT
+class Text:
+    def __init__(self, score):
+        self.score = score
+        self.position_of_score = (10, 10)
+        self.bigger_font = pygame.font.Font('freesansbold.ttf', 32)
+        self.smaller_font = pygame.font.Font('freesansbold.ttf', 20)
 
-    if (snake_touched_x_border or snake_touched_y_border):
-        return True
-    else:
-        return False
+    def show_score(self, screen):
+        score_text = self.bigger_font.render("Score: " + str(self.score), True, white_color)
+        screen.blit(score_text, self.position_of_score)
 
-def handle_snake_touched_border(x_snake, y_snake, score_points, speed_of_snake):
-    score_points = 0
-    speed_of_snake = 1.25
-    x_snake = (SCREEN_WIDTH - snake_width) / 2
-    y_snake = (SCREEN_HEIGHT - snake_height) / 2
+    def show_keys(self, screen):
+        speed_up_text = self.smaller_font.render("A for speed up ", True, white_color)
+        slow_down_text = self.smaller_font.render("D for slow down ", True, white_color)
+        reset_speed_text = self.smaller_font.render("S for reset speed ", True, white_color)
 
-    return x_snake, y_snake, score_points, speed_of_snake
+        screen.blit(speed_up_text, (10, 60))
+        screen.blit(slow_down_text, (10, 90))
+        screen.blit(reset_speed_text, (10, 120))
 
-def check_snake_ate_food(x_snake, y_snake, x_food, y_food):
-    snake_touched_food_x = (x_food + food_width) > x_snake and x_snake > (x_food - food_width)
-    snake_touched_food_y = (y_food + food_height) > y_snake and y_snake > (y_food - food_height)
 
-    if snake_touched_food_x and snake_touched_food_y:
-        return True
-    else:
-        return False
+class Game(Snake, Text):
+    def __init__(self, x_snake, y_snake, speed_of_snake, score):
+        super().__init__(x_snake, y_snake, speed_of_snake, score)
+        self.snake_width = 30
+        self.snake_height = 30
+        
+    def reset_game(self):
+        self.score = 0
+        self.speed_of_snake = 1.25
+        self.x_snake = (SCREEN_WIDTH - self.snake_width) / 2
+        self.y_snake = (SCREEN_HEIGHT - self.snake_height) / 2
 
-def handle_eaten_food(x_food, y_food, score_points, speed_of_snake):
-    score_points += 1
-    speed_of_snake += 0.1
-    x_food, y_food = reset_food()
-
-    return x_food, y_food, score_points, speed_of_snake
-
-def handle_speed(speed_of_snake, pressed):
-    speed_amount = 0.001
-
-    if pressed[pygame.K_a]:
-        speed_of_snake += speed_amount 
-    elif pressed[pygame.K_d]:
-        speed_of_snake -= speed_amount 
-    elif pressed[pygame.K_s]:
-        speed_of_snake = 1.25
-
-    return speed_of_snake
-
-def show_keys():
-    speed_up_text = smaller_font.render("A for speed up ", True, white_color)
-    slow_down_text = smaller_font.render("D for slow down ", True, white_color)
-    reset_speed_text = smaller_font.render("S for reset speed ", True, white_color)
-
-    screen.blit(speed_up_text, (10, 60))
-    screen.blit(slow_down_text, (10, 90))
-    screen.blit(reset_speed_text, (10, 120))
-
-def show_score():
-    score = bigger_font.render("Score: " + str(score_points), True, white_color)
-    screen.blit(score, position_of_font)
-
-snake = Snake(250, 250, 1.25, 'down')
-food = Food(random.randint(0, 1150), random.randint(0, 950))
 
 def main():
-    events = pygame.event.get()
-    pressed = pygame.key.get_pressed()
-    
-    for event in events:
-        action = event.type
+    # Basic config
+    pygame.init()
+    pygame.display.set_caption('Snake Game')
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-        # Exit
-        if action == pygame.QUIT:
-            sys.exit()
+    # Vars for objects
+    width = 250
+    height = 250
+    speed = 1.25
+    score = 0
+    direction = 'down'
+    random_x = random.randint(0, 1150)
+    random_y = random.randint(0, 950)
 
-    screen.fill(black_background)
+    # Create objects
+    text = Text(score)
+    game = Game(height, width, speed, score)
+    snake = Snake(width, height, speed, direction)
+    food = Food(random_x, random_y, height, width, speed, direction)
 
-    ### Snake
-    # Snake object
-    snake = pygame.draw.rect(screen, color_of_snake, ((x_snake, y_snake), (snake_width, snake_height)))
+    # Main loop
+    while True:
+        events = pygame.event.get()
+        pressed = pygame.key.get_pressed()
+        
+        for event in events:
+            action = event.type
 
-    # Change direction if user pressed arrow key
-    current_direction = change_direction(current_direction, pressed)
+            # Exit
+            if action == pygame.QUIT:
+                sys.exit()
 
-    # Move snake in current direction
-    x_snake, y_snake = move(current_direction, x_snake, y_snake)
+        # Fill background with black color
+        screen.fill(black_background)
 
-    # Check if snake touched border
-    snake_touched_border = check_snake_touched_border(x_snake, y_snake)
+        ### Snake
+        # Create snake object 
+        snake.draw_snake(screen)
 
-    if snake_touched_border:
-        x_snake, y_snake, score_points, speed_of_snake = handle_snake_touched_border(
-            x_snake, y_snake, score_points, speed_of_snake
-        )
+        # Change direction if user pressed arrow key
+        snake.change_direction(pressed)
 
-    ### Food
-    # Food object
-    food = pygame.draw.rect(screen, color_of_food, ((x_food, y_food), (food_width, food_height)))
+        # Move snake in current direction
+        snake.move()
 
-    # Check if snake ate food
-    snake_ate_food = check_snake_ate_food(x_snake, y_snake, x_food, y_food)
+        # Check if snake touched border
+        snake_touched_border = snake.check_snake_touched_border()
 
-    if snake_ate_food:
-        x_food, y_food, score_points, speed_of_snake = handle_eaten_food(
-            x_food, y_food, score_points, speed_of_snake
-        )
+        if snake_touched_border:
+            game.reset_game()
 
-    ### Others
-    show_keys()
-    show_score()
-    speed_of_snake = handle_speed(speed_of_snake, pressed)
+        ### Food
+        # Create food object
+        food.draw_food(screen)
 
-    pygame.display.update()
+        # Check if snake ate food
+        snake_ate_food = food.check_snake_ate_food()
+
+        if snake_ate_food:
+            food.handle_eaten_food()
+
+        ### Others
+        text.show_keys(screen)
+        text.show_score(screen)
+        snake.handle_speed(pressed)
+
+        pygame.display.update()
 
 
-if main == '__main__':
+if __name__ == '__main__':
     main()
