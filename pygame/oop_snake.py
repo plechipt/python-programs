@@ -18,24 +18,31 @@ smaller_font = pygame.font.Font('freesansbold.ttf', 20)
 score_points = 0
 position_of_font = (10, 10)
 
-# Snake
-x_snake = 250
-y_snake = 250
-speed_of_snake = 1.25
-snake_width, snake_height = 30, 30
-color_of_snake = white_color
-current_direction = 'down'
 
-# Food
-def reset_food():
-    x_food = random.randint(0, 1150)
-    y_food = random.randint(0, 950)
+class Snake:
+    def __init__(self, x_snake, y_snake, speed_of_snake, current_direction):
+        self.x_snake = x_snake
+        self.y_snake = y_snake
+        self.speed_of_snake = speed_of_snake
+        self.current_direction = current_direction
+        self.snake_width = 30
+        self.snake_height = 30
+        self.color_of_snake = white_color
 
-    return x_food, y_food
+class Food:
+    def __init__(self, x_food, y_food):
+        self.x_food = x_food
+        self.y_food = y_food
+        self.food_width = 30
+        self.food_height = 30
+        self.color_of_food = (240, 52, 52, 1)
 
-x_food, y_food = reset_food()
-food_width, food_height = 30, 30
-color_of_food = (240, 52, 52, 1)
+
+    def reset_food():
+        x_food = random.randint(0, 1150)
+        y_food = random.randint(0, 950)
+
+        return x_food, y_food
 
 pygame.display.set_caption('Snake Game')
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -123,8 +130,10 @@ def show_score():
     score = bigger_font.render("Score: " + str(score_points), True, white_color)
     screen.blit(score, position_of_font)
 
+snake = Snake(250, 250, 1.25, 'down')
+food = Food(random.randint(0, 1150), random.randint(0, 950))
 
-while True:
+def main():
     events = pygame.event.get()
     pressed = pygame.key.get_pressed()
     
@@ -173,3 +182,7 @@ while True:
     speed_of_snake = handle_speed(speed_of_snake, pressed)
 
     pygame.display.update()
+
+
+if main == '__main__':
+    main()
