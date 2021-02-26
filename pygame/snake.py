@@ -98,6 +98,18 @@ def handle_eaten_food(x_food, y_food, score_points, speed_of_snake):
 
     return x_food, y_food, score_points, speed_of_snake
 
+def handle_speed(speed_of_snake, pressed):
+    speed_amount = 0.001
+
+    if pressed[pygame.K_a]:
+        speed_of_snake += speed_amount 
+    elif pressed[pygame.K_d]:
+        speed_of_snake -= speed_amount 
+    elif pressed[pygame.K_s]:
+        speed_of_snake = 1.25
+
+    return speed_of_snake
+        
 def show_score():
     score = font.render("Score: " + str(score_points), True, white_color)
     screen.blit(score, position_of_font)
@@ -115,7 +127,7 @@ while True:
             sys.exit()
 
     screen.fill(black_background)
-    
+
     ### Snake
     # Snake object
     snake = pygame.draw.rect(screen, color_of_snake, ((x_snake, y_snake), (snake_width, snake_height)))
@@ -142,7 +154,11 @@ while True:
     snake_ate_food = check_snake_ate_food(x_snake, y_snake, x_food, y_food)
 
     if snake_ate_food:
-        x_food, y_food, score_points, speed_of_snake = handle_eaten_food(x_food, y_food, score_points, speed_of_snake)
+        x_food, y_food, score_points, speed_of_snake = handle_eaten_food(
+            x_food, y_food, score_points, speed_of_snake
+        )
 
+    ### Others
     show_score()
+    speed_of_snake = handle_speed(speed_of_snake, pressed)
     pygame.display.update()
