@@ -7,7 +7,7 @@ import pygame
 black_background = (0, 0, 0)
 white_color = (255, 255, 255)
 directions = ['left', 'right', 'up', 'down']
-SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 1000
+SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = 1500, 1000
 
 
 class Snake:
@@ -58,8 +58,6 @@ class Snake:
     def handle_speed(self, pressed):
         speed_amount = 0.005
 
-        print(self.speed_of_snake)
-
         if pressed[pygame.K_a]:
             self.speed_of_snake += speed_amount 
         elif pressed[pygame.K_d] and self.speed_of_snake >= 0:
@@ -88,16 +86,21 @@ class Food:
         return x_food, y_food
        
 class Text:
-    def __init__(self, score):
+    def __init__(self, score, last_score):
         self.score = score
-        self.position_of_key_y = 60
+        self.last_score = last_score
+        self.position_of_key_y = 100
         self.position_of_score = (10, 10)
+        self.position_of_last_score = (10, 50)
         self.bigger_font = pygame.font.Font('freesansbold.ttf', 32)
         self.smaller_font = pygame.font.Font('freesansbold.ttf', 20)
 
     def show_score(self, screen):
         score_text = self.bigger_font.render("Score: " + str(self.score), True, white_color)
+        last_score_text = self.bigger_font.render("Last Score: " + str(self.last_score), True, white_color)
+
         screen.blit(score_text, self.position_of_score)
+        screen.blit(last_score_text, self.position_of_last_score)
 
     def show_keys(self, screen):
         speed_up_text = self.smaller_font.render("A for speed up ", True, white_color)
@@ -136,11 +139,11 @@ def main():
     direction = random.choice(directions)
     width = SCREEN_WIDTH / 2
     height = SCREEN_HEIGHT / 2
-    random_x = random.randint(0, SCREEN_WIDTH - 50)
+    random_x = random.randint(250, SCREEN_WIDTH - 50)
     random_y = random.randint(0, SCREEN_HEIGHT - 50)
 
     # Create objects
-    text = Text(0)
+    text = Text(0, 0)
     snake = Snake(width, height, speed, direction)
     food = Food(random_x, random_y)
 
@@ -153,7 +156,7 @@ def main():
             action = event.type
 
             # Exit
-            if action == pygame.QUIT:
+            if action == pygame.QUIT or pressed[pygame.K_ESCAPE]:
                 sys.exit()
 
         # Fill background with black color
@@ -174,6 +177,7 @@ def main():
 
         if snake_touched_border:
             # Restart game
+            text.last_score = text.score
             text.score = 0
             snake.speed_of_snake = 1.25
             snake.current_direction = random.choice(directions)
@@ -198,6 +202,7 @@ def main():
         text.show_score(screen)
         snake.handle_speed(pressed)
 
+        pygame.draw.rect(screen, snake.color_of_snake, ((250, 0), (10, 10)))
         pygame.display.update()
 
 
