@@ -64,9 +64,8 @@ class Snake:
         elif pressed[pygame.K_SPACE]:
             self.speed_of_snake = 1.25
 
-class Food(Snake):
-    def __init__(self, x_food, y_food, x_snake, y_snake, speed_of_snake, current_direction):
-        super(Food, self).__init__(x_snake, y_snake, speed_of_snake, current_direction)
+class Food:
+    def __init__(self, x_food, y_food,):
         self.x_food = x_food
         self.y_food = y_food
         self.food_width = 30
@@ -130,20 +129,17 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     # Vars for objects
-    width = SCREEN_WIDTH / 2
-    height = SCREEN_HEIGHT / 2
-    speed = 1.25
-    score = 0
     speed = 1.25
     direction = 'down'
-    width, height = 250, 250
+    width = SCREEN_WIDTH / 2
+    height = SCREEN_HEIGHT / 2
     random_x = random.randint(0, 1150)
     random_y = random.randint(0, 950)
 
     # Create objects
-    text = Text(score)
+    text = Text(0)
     snake = Snake(width, height, speed, direction)
-    food = Food(random_x, random_y, width, height, speed, direction)
+    food = Food(random_x, random_y)
 
     # Main loop
     while True:
