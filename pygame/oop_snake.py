@@ -6,6 +6,7 @@ import pygame
 # Basic vars
 black_background = (0, 0, 0)
 white_color = (255, 255, 255)
+directions = ['left', 'right', 'up', 'down']
 SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 1000
 
 
@@ -55,11 +56,13 @@ class Snake:
             return False
 
     def handle_speed(self, pressed):
-        speed_amount = 0.001
+        speed_amount = 0.005
+
+        print(self.speed_of_snake)
 
         if pressed[pygame.K_a]:
             self.speed_of_snake += speed_amount 
-        elif pressed[pygame.K_d]:
+        elif pressed[pygame.K_d] and self.speed_of_snake >= 0:
             self.speed_of_snake -= speed_amount 
         elif pressed[pygame.K_SPACE]:
             self.speed_of_snake = 1.25
@@ -130,11 +133,11 @@ def main():
 
     # Vars for objects
     speed = 1.25
-    direction = 'down'
+    direction = random.choice(directions)
     width = SCREEN_WIDTH / 2
     height = SCREEN_HEIGHT / 2
-    random_x = random.randint(0, 1150)
-    random_y = random.randint(0, 950)
+    random_x = random.randint(0, SCREEN_WIDTH - 50)
+    random_y = random.randint(0, SCREEN_HEIGHT - 50)
 
     # Create objects
     text = Text(0)
@@ -173,6 +176,7 @@ def main():
             # Restart game
             text.score = 0
             snake.speed_of_snake = 1.25
+            snake.current_direction = random.choice(directions)
             snake.x_snake = (SCREEN_WIDTH - snake.snake_width) / 2
             snake.y_snake = (SCREEN_HEIGHT - snake.snake_height) / 2
 
@@ -186,7 +190,7 @@ def main():
         if snake_ate_food:
             # Handle snake ate food
             text.score += 1
-            snake.speed_of_snake += 0.1
+            snake.speed_of_snake += 0.2
             food.x_food, food.y_food = food.reset_food()
 
         ### Others
