@@ -61,12 +61,12 @@ class Snake:
             self.speed_of_snake += speed_amount 
         elif pressed[pygame.K_d]:
             self.speed_of_snake -= speed_amount 
-        elif pressed[pygame.K_s]:
+        elif pressed[pygame.K_SPACE]:
             self.speed_of_snake = 1.25
 
 class Food(Snake):
     def __init__(self, x_food, y_food, x_snake, y_snake, speed_of_snake, current_direction):
-        super().__init__(x_snake, y_snake, speed_of_snake, current_direction)
+        super(Food, self).__init__(x_snake, y_snake, speed_of_snake, current_direction)
         self.x_food = x_food
         self.y_food = y_food
         self.food_width = 30
@@ -78,12 +78,6 @@ class Food(Snake):
         sizes = self.food_width, self.food_height
 
         pygame.draw.rect(screen, self.color_of_food, ((positions), (sizes)))
-
-    def reset_food(self):
-        x_food = random.randint(0, 1150)
-        y_food = random.randint(0, 950)
-
-        return x_food, y_food
 
     def check_snake_ate_food(self):
         x_start =  (self.x_food + self.food_width) > self.x_snake
@@ -100,10 +94,10 @@ class Food(Snake):
             return False
 
     def handle_eaten_food(self):
-        score_points += 1
-        speed_of_snake += 0.1
-        x_food, y_food = reset_food()
-
+        self.score_points += 1
+        self.speed_of_snake += 0.1
+        self.x_food = random.randint(0, 1150)
+        self.y_food = random.randint(0, 950)
 
 class Text:
     def __init__(self, score):
@@ -119,7 +113,7 @@ class Text:
     def show_keys(self, screen):
         speed_up_text = self.smaller_font.render("A for speed up ", True, white_color)
         slow_down_text = self.smaller_font.render("D for slow down ", True, white_color)
-        reset_speed_text = self.smaller_font.render("S for reset speed ", True, white_color)
+        reset_speed_text = self.smaller_font.render("SPACE for reset speed ", True, white_color)
 
         screen.blit(speed_up_text, (10, 60))
         screen.blit(slow_down_text, (10, 90))
@@ -133,6 +127,7 @@ class Game(Snake, Text):
         self.snake_height = 30
         
     def reset_game(self):
+        print(self.score)
         self.score = 0
         self.speed_of_snake = 1.25
         self.x_snake = (SCREEN_WIDTH - self.snake_width) / 2
@@ -146,8 +141,8 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     # Vars for objects
-    width = 250
-    height = 250
+    width = SCREEN_WIDTH / 2
+    height = SCREEN_HEIGHT / 2
     speed = 1.25
     score = 0
     direction = 'down'
@@ -156,9 +151,9 @@ def main():
 
     # Create objects
     text = Text(score)
-    game = Game(height, width, speed, score)
     snake = Snake(width, height, speed, direction)
     food = Food(random_x, random_y, height, width, speed, direction)
+    game = Game(1, 1, 1, 1)
 
     # Main loop
     while True:
