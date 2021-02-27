@@ -84,30 +84,11 @@ class Food(Snake):
         y_food = random.randint(0, 950)
 
         return x_food, y_food
-
-    def check_snake_ate_food(self):
-        x_start =  (self.x_food + self.food_width) > self.x_snake
-        x_end = self.x_snake > (self.x_food - self.food_width)
-        y_start = (self.y_food + self.food_height) > self.y_snake
-        y_end =  self.y_snake > (self.y_food - self.food_height)
-
-        snake_touched_food_x = x_start and x_end
-        snake_touched_food_y =  y_start and y_end
-
-        if snake_touched_food_x and snake_touched_food_y:
-            return True
-        else:
-            return False
-
-    def handle_eaten_food(self):
-        score_points += 1
-        speed_of_snake += 0.1
-        x_food, y_food = reset_food()
-
-
+       
 class Text:
     def __init__(self, score):
         self.score = score
+        self.position_of_key_y = 60
         self.position_of_score = (10, 10)
         self.bigger_font = pygame.font.Font('freesansbold.ttf', 32)
         self.smaller_font = pygame.font.Font('freesansbold.ttf', 20)
@@ -117,26 +98,30 @@ class Text:
         screen.blit(score_text, self.position_of_score)
 
     def show_keys(self, screen):
+
         speed_up_text = self.smaller_font.render("A for speed up ", True, white_color)
         slow_down_text = self.smaller_font.render("D for slow down ", True, white_color)
-        reset_speed_text = self.smaller_font.render("S for reset speed ", True, white_color)
+        reset_speed_text = self.smaller_font.render("S for reset speed ", True, white_color)            
 
-        screen.blit(speed_up_text, (10, 60))
-        screen.blit(slow_down_text, (10, 90))
-        screen.blit(reset_speed_text, (10, 120))
+        screen.blit(speed_up_text, (10, self.position_of_key_y))
+        screen.blit(slow_down_text, (10, self.position_of_key_y + 30))
+        screen.blit(reset_speed_text, (10, self.position_of_key_y + 60))
 
 
-class Game(Snake, Text):
-    def __init__(self, x_snake, y_snake, speed_of_snake, score):
-        super().__init__(x_snake, y_snake, speed_of_snake, score)
-        self.snake_width = 30
-        self.snake_height = 30
-        
-    def reset_game(self):
-        self.score = 0
-        self.speed_of_snake = 1.25
-        self.x_snake = (SCREEN_WIDTH - self.snake_width) / 2
-        self.y_snake = (SCREEN_HEIGHT - self.snake_height) / 2
+# Functions
+def check_snake_ate_food(snake, food):
+    x_start =  (food.x_food + food.food_width) > snake.x_snake
+    x_end = snake.x_snake > (food.x_food - food.food_width)
+    y_start = (food.y_food + food.food_height) > snake.y_snake
+    y_end =  snake.y_snake > (food.y_food - food.food_height)
+ 
+    snake_touched_food_x = x_start and x_end
+    snake_touched_food_y =  y_start and y_end
+
+    if snake_touched_food_x and snake_touched_food_y:
+        return True
+    else:
+        return False
 
 
 def main():
@@ -146,19 +131,17 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     # Vars for objects
-    width = 250
-    height = 250
-    speed = 1.25
     score = 0
+    speed = 1.25
     direction = 'down'
+    width, height = 250, 250
     random_x = random.randint(0, 1150)
     random_y = random.randint(0, 950)
 
     # Create objects
     text = Text(score)
-    game = Game(height, width, speed, score)
     snake = Snake(width, height, speed, direction)
-    food = Food(random_x, random_y, height, width, speed, direction)
+    food = Food(random_x, random_y, width, height, speed, direction)
 
     # Main loop
     while True:
@@ -189,17 +172,24 @@ def main():
         snake_touched_border = snake.check_snake_touched_border()
 
         if snake_touched_border:
-            game.reset_game()
+            # Restart game
+            text.score = 0
+            snake.speed_of_snake = 1.25
+            snake.x_snake = (SCREEN_WIDTH - snake.snake_width) / 2
+            snake.y_snake = (SCREEN_HEIGHT - snake.snake_height) / 2
 
         ### Food
         # Create food object
         food.draw_food(screen)
 
         # Check if snake ate food
-        snake_ate_food = food.check_snake_ate_food()
+        snake_ate_food = check_snake_ate_food(snake, food)
 
         if snake_ate_food:
-            food.handle_eaten_food()
+            # Handle snake ate food
+            text.score += 1
+            snake.speed_of_snake += 0.1
+            food.x_food, food.y_food = food.reset_food()
 
         ### Others
         text.show_keys(screen)
