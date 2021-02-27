@@ -60,9 +60,9 @@ class Snake:
 
         if pressed[pygame.K_a]:
             self.speed_of_snake += speed_amount 
-        elif pressed[pygame.K_d] and self.speed_of_snake >= 0:
+        if pressed[pygame.K_d] and self.speed_of_snake >= 0:
             self.speed_of_snake -= speed_amount 
-        elif pressed[pygame.K_SPACE]:
+        if pressed[pygame.K_SPACE]:
             self.speed_of_snake = 1.25
 
 class Food:
@@ -209,7 +209,6 @@ def main():
         text.show_score(screen)
         snake.handle_speed(pressed)
 
-        pygame.draw.rect(screen, snake.color_of_snake, ((250, 0), (10, 10)))
         pygame.display.update()
 
 
