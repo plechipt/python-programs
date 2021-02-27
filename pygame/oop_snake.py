@@ -61,12 +61,12 @@ class Snake:
             self.speed_of_snake += speed_amount 
         elif pressed[pygame.K_d]:
             self.speed_of_snake -= speed_amount 
-        elif pressed[pygame.K_s]:
+        elif pressed[pygame.K_SPACE]:
             self.speed_of_snake = 1.25
 
 class Food(Snake):
     def __init__(self, x_food, y_food, x_snake, y_snake, speed_of_snake, current_direction):
-        super().__init__(x_snake, y_snake, speed_of_snake, current_direction)
+        super(Food, self).__init__(x_snake, y_snake, speed_of_snake, current_direction)
         self.x_food = x_food
         self.y_food = y_food
         self.food_width = 30
@@ -98,10 +98,9 @@ class Text:
         screen.blit(score_text, self.position_of_score)
 
     def show_keys(self, screen):
-
         speed_up_text = self.smaller_font.render("A for speed up ", True, white_color)
         slow_down_text = self.smaller_font.render("D for slow down ", True, white_color)
-        reset_speed_text = self.smaller_font.render("S for reset speed ", True, white_color)            
+        reset_speed_text = self.smaller_font.render("SPACE for reset speed ", True, white_color)
 
         screen.blit(speed_up_text, (10, self.position_of_key_y))
         screen.blit(slow_down_text, (10, self.position_of_key_y + 30))
@@ -131,6 +130,9 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     # Vars for objects
+    width = SCREEN_WIDTH / 2
+    height = SCREEN_HEIGHT / 2
+    speed = 1.25
     score = 0
     speed = 1.25
     direction = 'down'

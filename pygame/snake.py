@@ -105,7 +105,7 @@ def handle_speed(speed_of_snake, pressed):
         speed_of_snake += speed_amount 
     elif pressed[pygame.K_d]:
         speed_of_snake -= speed_amount 
-    elif pressed[pygame.K_s]:
+    elif pressed[pygame.K_SPACE]:
         speed_of_snake = 1.25
 
     return speed_of_snake
@@ -113,7 +113,7 @@ def handle_speed(speed_of_snake, pressed):
 def show_keys():
     speed_up_text = smaller_font.render("A for speed up ", True, white_color)
     slow_down_text = smaller_font.render("D for slow down ", True, white_color)
-    reset_speed_text = smaller_font.render("S for reset speed ", True, white_color)
+    reset_speed_text = smaller_font.render("SPACE for reset speed ", True, white_color)
 
     screen.blit(speed_up_text, (10, 60))
     screen.blit(slow_down_text, (10, 90))
@@ -122,7 +122,6 @@ def show_keys():
 def show_score():
     score = bigger_font.render("Score: " + str(score_points), True, white_color)
     screen.blit(score, position_of_font)
-
 
 while True:
     events = pygame.event.get()
