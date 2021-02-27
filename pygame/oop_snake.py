@@ -56,7 +56,7 @@ class Snake:
             return False
 
     def handle_speed(self, pressed):
-        speed_amount = 0.005
+        speed_amount = 0.01
 
         if pressed[pygame.K_a]:
             self.speed_of_snake += speed_amount 
@@ -79,28 +79,27 @@ class Food:
 
         pygame.draw.rect(screen, self.color_of_food, ((positions), (sizes)))
 
-    def reset_food(self):
-        x_food = random.randint(0, 1150)
-        y_food = random.randint(0, 950)
-
-        return x_food, y_food
        
 class Text:
-    def __init__(self, score, last_score):
+    def __init__(self, score, last_score, best_score):
         self.score = score
         self.last_score = last_score
-        self.position_of_key_y = 100
+        self.best_score = best_score
+        self.position_of_key_y = 140
         self.position_of_score = (10, 10)
         self.position_of_last_score = (10, 50)
-        self.bigger_font = pygame.font.Font('freesansbold.ttf', 32)
+        self.position_of_best_score = (10, 90)
+        self.bigger_font = pygame.font.Font('freesansbold.ttf', 30)
         self.smaller_font = pygame.font.Font('freesansbold.ttf', 20)
 
     def show_score(self, screen):
         score_text = self.bigger_font.render("Score: " + str(self.score), True, white_color)
         last_score_text = self.bigger_font.render("Last Score: " + str(self.last_score), True, white_color)
+        best_score_text = self.bigger_font.render("Best score: " + str(self.best_score), True, white_color)
 
         screen.blit(score_text, self.position_of_score)
         screen.blit(last_score_text, self.position_of_last_score)
+        screen.blit(best_score_text, self.position_of_best_score)
 
     def show_keys(self, screen):
         speed_up_text = self.smaller_font.render("A for speed up ", True, white_color)
@@ -127,6 +126,12 @@ def check_snake_ate_food(snake, food):
     else:
         return False
 
+def reset_food():
+    random_x = random.randint(250, SCREEN_WIDTH - 50)
+    random_y = random.randint(0, SCREEN_HEIGHT - 50)
+
+    return random_x, random_y
+
 
 def main():
     # Basic config
@@ -135,17 +140,16 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     # Vars for objects
-    speed = 1.25
+    speed = 1.75
     direction = random.choice(directions)
     width = SCREEN_WIDTH / 2
     height = SCREEN_HEIGHT / 2
-    random_x = random.randint(250, SCREEN_WIDTH - 50)
-    random_y = random.randint(0, SCREEN_HEIGHT - 50)
+    position_x, position_y = reset_food()
 
     # Create objects
-    text = Text(0, 0)
+    text = Text(0, 0, 0)
     snake = Snake(width, height, speed, direction)
-    food = Food(random_x, random_y)
+    food = Food(position_x, position_y)
 
     # Main loop
     while True:
@@ -177,9 +181,12 @@ def main():
 
         if snake_touched_border:
             # Restart game
+            if text.score > text.last_score:
+                text.best_score = text.score
+
             text.last_score = text.score
             text.score = 0
-            snake.speed_of_snake = 1.25
+            snake.speed_of_snake = speed
             snake.current_direction = random.choice(directions)
             snake.x_snake = (SCREEN_WIDTH - snake.snake_width) / 2
             snake.y_snake = (SCREEN_HEIGHT - snake.snake_height) / 2
@@ -195,7 +202,7 @@ def main():
             # Handle snake ate food
             text.score += 1
             snake.speed_of_snake += 0.2
-            food.x_food, food.y_food = food.reset_food()
+            food.x_food, food.y_food = reset_food()
 
         ### Others
         text.show_keys(screen)
