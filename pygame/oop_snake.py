@@ -127,8 +127,8 @@ def check_snake_ate_food(snake, food):
         return False
 
 def reset_food():
-    random_x = random.randint(250, SCREEN_WIDTH - 50)
-    random_y = random.randint(0, SCREEN_HEIGHT - 50)
+    random_x = random.randint(250, SCREEN_WIDTH - 75)
+    random_y = random.randint(50, SCREEN_HEIGHT - 75)
 
     return random_x, random_y
 
@@ -140,7 +140,7 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     # Vars for objects
-    speed = 1.75
+    speed = 2
     direction = random.choice(directions)
     width = SCREEN_WIDTH / 2
     height = SCREEN_HEIGHT / 2
@@ -181,7 +181,7 @@ def main():
 
         if snake_touched_border:
             # Restart game
-            if text.score > text.last_score:
+            if text.score > text.best_score:
                 text.best_score = text.score
 
             text.last_score = text.score
