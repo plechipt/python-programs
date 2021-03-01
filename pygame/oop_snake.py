@@ -141,7 +141,11 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     # Vars for objects
+<<<<<<< HEAD
     direction = random.choice(DIRECTIONS)
+=======
+    direction = random.choice(directions)
+>>>>>>> c906c8831049af4777be3518e8a34277218e044f
     width = SCREEN_WIDTH / 2
     height = SCREEN_HEIGHT / 2
     position_x, position_y = reset_food()
@@ -187,7 +191,11 @@ def main():
             text.last_score = text.score
             text.score = 0
             snake.speed_of_snake = SPEED
+<<<<<<< HEAD
             snake.current_direction = random.choice(DIRECTIONS)
+=======
+            snake.current_direction = random.choice(directions)
+>>>>>>> c906c8831049af4777be3518e8a34277218e044f
             snake.x_snake = (SCREEN_WIDTH - snake.snake_width) / 2
             snake.y_snake = (SCREEN_HEIGHT - snake.snake_height) / 2
 
