@@ -3,10 +3,11 @@ import time
 import random
 import pygame
 
-# Basic vars
-black_background = (0, 0, 0)
-white_color = (255, 255, 255)
-directions = ['left', 'right', 'up', 'down']
+# Global vars
+SPEED = 2
+BLACK_BACKGROUND = (0, 0, 0)
+WHITE_COLOR = (255, 255, 255)
+DIRECTIONS = ['left', 'right', 'up', 'down']
 SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = 1500, 1000
 
 
@@ -18,7 +19,7 @@ class Snake:
         self.current_direction = current_direction
         self.snake_width = 30
         self.snake_height = 30
-        self.color_of_snake = white_color
+        self.color_of_snake = WHITE_COLOR
 
     def draw_snake(self, screen):
         positions = self.x_snake, self.y_snake
@@ -63,7 +64,7 @@ class Snake:
         if pressed[pygame.K_d] and self.speed_of_snake >= 0:
             self.speed_of_snake -= speed_amount 
         if pressed[pygame.K_SPACE]:
-            self.speed_of_snake = 1.25
+            self.speed_of_snake = SPEED 
 
 class Food:
     def __init__(self, x_food, y_food,):
@@ -93,18 +94,18 @@ class Text:
         self.smaller_font = pygame.font.Font('freesansbold.ttf', 20)
 
     def show_score(self, screen):
-        score_text = self.bigger_font.render("Score: " + str(self.score), True, white_color)
-        last_score_text = self.bigger_font.render("Last Score: " + str(self.last_score), True, white_color)
-        best_score_text = self.bigger_font.render("Best score: " + str(self.best_score), True, white_color)
+        score_text = self.bigger_font.render("Score: " + str(self.score), True, WHITE_COLOR)
+        last_score_text = self.bigger_font.render("Last Score: " + str(self.last_score), True, WHITE_COLOR)
+        best_score_text = self.bigger_font.render("Best score: " + str(self.best_score), True, WHITE_COLOR)
 
         screen.blit(score_text, self.position_of_score)
         screen.blit(last_score_text, self.position_of_last_score)
         screen.blit(best_score_text, self.position_of_best_score)
 
     def show_keys(self, screen):
-        speed_up_text = self.smaller_font.render("A for speed up ", True, white_color)
-        slow_down_text = self.smaller_font.render("D for slow down ", True, white_color)
-        reset_speed_text = self.smaller_font.render("SPACE for reset speed ", True, white_color)
+        speed_up_text = self.smaller_font.render("A for speed up ", True, WHITE_COLOR)
+        slow_down_text = self.smaller_font.render("D for slow down ", True, WHITE_COLOR)
+        reset_speed_text = self.smaller_font.render("SPACE for reset speed ", True, WHITE_COLOR)
 
         screen.blit(speed_up_text, (10, self.position_of_key_y))
         screen.blit(slow_down_text, (10, self.position_of_key_y + 30))
@@ -140,15 +141,14 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     # Vars for objects
-    speed = 2
-    direction = random.choice(directions)
+    direction = random.choice(DIRECTIONS)
     width = SCREEN_WIDTH / 2
     height = SCREEN_HEIGHT / 2
     position_x, position_y = reset_food()
 
     # Create objects
     text = Text(0, 0, 0)
-    snake = Snake(width, height, speed, direction)
+    snake = Snake(width, height, SPEED, direction)
     food = Food(position_x, position_y)
 
     # Main loop
@@ -164,7 +164,7 @@ def main():
                 sys.exit()
 
         # Fill background with black color
-        screen.fill(black_background)
+        screen.fill(BLACK_BACKGROUND)
 
         ### Snake
         # Create snake object 
@@ -186,8 +186,8 @@ def main():
 
             text.last_score = text.score
             text.score = 0
-            snake.speed_of_snake = speed
-            snake.current_direction = random.choice(directions)
+            snake.speed_of_snake = SPEED
+            snake.current_direction = random.choice(DIRECTIONS)
             snake.x_snake = (SCREEN_WIDTH - snake.snake_width) / 2
             snake.y_snake = (SCREEN_HEIGHT - snake.snake_height) / 2
 
