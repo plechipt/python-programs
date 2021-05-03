@@ -116,6 +116,7 @@ while True:
             score_val -= 1
             rychlost = 0
             block_speed = 0
+
         if i[1] >= screen_height + tile_height:
             i[1] = random.randrange(-300,-30)
             i[0] = random.randrange(0,screen_width - tile_width)
