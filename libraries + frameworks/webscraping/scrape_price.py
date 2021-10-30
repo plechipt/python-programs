@@ -1,8 +1,13 @@
+import ctypes
 import requests
+import win32gui, win32con
 from bs4 import BeautifulSoup
 from win10toast import ToastNotifier
 
-# 
+# Hide python console
+the_program_to_hide = win32gui.GetForegroundWindow()
+win32gui.ShowWindow(the_program_to_hide , win32con.SW_HIDE)
+
 toaster = ToastNotifier()
 url = requests.get('https://www.myprotein.cz/sports-nutrition/impact-whey-protein/10530943.html?fbclid=IwAR1LpOH4TqGoybbgsc9yvmM1HILm4-BCY-Lt5LMCSWGCuhI2LjYeVF4yWzQ')
 bs = BeautifulSoup(url.content, 'html.parser')
