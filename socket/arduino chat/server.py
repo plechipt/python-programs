@@ -1,7 +1,7 @@
 import sys
 import socket
 
-hostname = socket.gethostname() 
+hostname = socket.gethostname()
 HOST = socket.gethostbyname(hostname)
 PORT = 8080
 
