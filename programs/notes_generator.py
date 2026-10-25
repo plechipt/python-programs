@@ -4,10 +4,10 @@ import random
 import keyboard
 
 natural_notes = ['A','B','C','D','E','F','G']
-sharp_notes = ['A#','B#','C#','D#','E#','F#','G#']
-flat_notes = ['Ab','Bb','Cb','Eb','Db','Gb']
+sharp_notes = ['A#','C#','D#','F#','G#']
+flat_notes = ['Ab','Bb','Eb','Db','Gb']
 
-sharp_mode = True
+sharp_mode = False
 timeout = 5
 first_round = True
 
@@ -52,6 +52,6 @@ while True:
     time.sleep(3)
 
     first_round = False
-    sharp_mode = not sharp_mode
+    sharp_mode = False
     
         
